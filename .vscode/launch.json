@@ -1,0 +1,23 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Onfly CLI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "onfly_report",
+            "args": [
+                "--input",
+                "data/reservas_hoteis.csv",
+                "--rates",
+                "data/taxas_cambio.csv"
+            ],
+            "env": {
+                "PYTHONPATH": "src"
+            },
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
