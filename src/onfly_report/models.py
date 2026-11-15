@@ -5,7 +5,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
+from enum import StrEnum
 
+class ReservationStatus(StrEnum):
+    NO_SHOW    = "NO_SHOW"
+    CANCELLED  = "CANCELLED"
+    CONFIRMED  = "CONFIRMED"
 
 @dataclass(frozen=True)
 class RawRow:
@@ -29,7 +34,7 @@ class Reservation:
     checkin: date
     checkout: date
     rooms: int
-    status: str
+    status: ReservationStatus
     currency: str
     amount: Decimal
     payment_method: str

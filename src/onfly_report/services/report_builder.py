@@ -6,6 +6,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from decimal import ROUND_HALF_UP, Decimal
 
+from ..models import ReservationStatus
 from ..repositories.csv_rate_repository import CsvRateRepository
 from ..repositories.csv_reservation_repository import CsvReservationRepository
 from .currency_converter import convert_to_brl
@@ -42,9 +43,9 @@ class ReportBuilder:
         reservations = [parser.parse(raw) for raw in self._reservation_repository.read()]
         rates = self._rate_repository.read()
 
-        status_counts = {"CONFIRMED": 0, "CANCELLED": 0, "NO_SHOW": 0}
+        status_counts = {status: 0 for status in ReservationStatus}
         for reservation in reservations:
-            status_counts[reservation.status] = status_counts.get(reservation.status, 0) + 1
+            status_counts[reservation.status] += 1
 
         confirmed = [row for row in reservations if is_billable(row.status)]
 
@@ -105,9 +106,9 @@ class ReportBuilder:
             "generated_at": now.isoformat(timespec="seconds"),
             "summary": {
                 "total_reservations": len(reservations),
-                "confirmed_reservations": status_counts.get("CONFIRMED", 0),
-                "cancelled_reservations": status_counts.get("CANCELLED", 0),
-                "no_show_reservations": status_counts.get("NO_SHOW", 0),
+                "confirmed_reservations": status_counts[ReservationStatus.CONFIRMED],
+                "cancelled_reservations": status_counts[ReservationStatus.CANCELLED],
+                "no_show_reservations": status_counts[ReservationStatus.NO_SHOW],
                 "total_room_nights": total_nights,
                 "total_amount_brl": format_money(total_amount),
                 "average_nightly_rate_brl": format_money(average_nightly_rate),

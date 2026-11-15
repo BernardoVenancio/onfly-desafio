@@ -6,7 +6,7 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 
 from ..exceptions import InputFileError
-from ..models import RawRow, Reservation
+from ..models import RawRow, Reservation, ReservationStatus
 
 
 class RowParser:
@@ -30,7 +30,7 @@ class RowParser:
                 checkin=date.fromisoformat((values.get("checkin_date") or "").strip()),
                 checkout=date.fromisoformat((values.get("checkout_date") or "").strip()),
                 rooms=int((values.get("rooms") or "").strip()),
-                status=(values.get("status") or "").strip(),
+                status=ReservationStatus((values.get("status") or "").strip()),
                 currency=(values.get("currency") or "").strip(),
                 amount=Decimal((values.get("amount") or "").strip()),
                 payment_method=(values.get("payment_method") or "").strip(),

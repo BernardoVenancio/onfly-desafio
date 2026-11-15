@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+from ..models import ReservationStatus
 
-def is_billable(status: str) -> bool:
+# Estados válidos entram aqui
+BILLABLE_STATUSES = frozenset({ReservationStatus.CONFIRMED})
+
+
+def is_billable(status: ReservationStatus) -> bool:
     """Indica se a reserva entra nos totais financeiros e de noites."""
-    return status == "CONFIRMED" #Apenas confirmed é descontado
+    return status in BILLABLE_STATUSES
